@@ -1,0 +1,161 @@
+.np{
+  pointer-events: none;
+  cursor: default;
+}
+.is-gray{
+  background: rgba(0, 0, 0, 0.5)!important;
+  color: #fff;
+}
+td, th{
+   transition:all 0.2s;
+
+  }
+
+tr:hover{
+background-color:rgba(252, 201, 201, 0.06);
+}
+
+.nav-cartel-topbar{
+	position: fixed;
+}
+.sala{
+ border: 1px solid transparent;
+ float: left;
+ margin: 5px;
+}
+.sala:hover{
+ border: 1px solid #761C1CFF;
+ background: #F4F4F43E;
+ cursor: pointer
+}
+.iniciado{
+	cursor:none;
+	opacity:0.5;
+	border: 1px solid #F03838FF;
+}
+
+.cartel-tile:hover{
+background-color: rgba(176, 202, 240,0.3);
+}
+.cartel-main{
+padding:20px;
+}
+.cartel-board{
+}
+.empresa-logo{
+float: left;
+}
+.empresa-acoes{
+float: left;
+padding: 5px;
+}
+.piece-on-board{
+ background:rgb(146, 194, 192);
+ text-align:center;
+ vertical-align:middle;
+ color: #fff;
+ text-shadow:0px 0px 3px #000;
+}
+.piece-on-board-hover{
+ background:rgb(89, 147, 144)!important;
+}
+.piece{
+ background:rgb(146, 194, 192);
+ text-align:center;
+ height:80px;
+ display:block;
+ width:50px;
+ font-size:15px;
+ padding:2px;
+ color: #000;
+ text-shadow:0px 0px 3px #000;
+ margin:1px;
+ cursor: pointer;
+ border: 1px solid rgb(80, 80, 82);
+
+}
+.vez{
+	border:4px dashed #FF0004FF ;
+	height: 100%;
+	width:100%;
+	position:fixed;
+	pointer-events: none;
+  	cursor: default;
+  	z-index: 500
+
+}
+.aguarde{
+	background-color: #B0FFF40A;
+	text-align:center;
+	vertical-align: middle;
+	font-weight: bold;
+	color:#5D5D5DFF;
+
+	height: 100%;
+	width:100%;
+	position:fixed;
+	pointer-events: none;
+  	cursor: default;
+  	z-index: 500
+
+}
+.piece:hover{
+background:rgb(69, 191, 186);
+}
+.cartel-board{
+margin-bottom: 80px;
+}
+.is-simulate-hover{
+background-color:rgb(228, 235, 229)
+}
+.is-el-simulate-hover[empty="false"]{
+background-color:rgb(189, 196, 190)!important;
+}
+.is-simulate-on-board-hover[empty="false"]{
+background-color:rgb(89, 147, 144)!important
+}
+.is-el-simulate-on-board-hover[empty="false"]{
+background-color:rgb(73, 124, 121)!important;
+}
+.is-hover[empty="true"]{
+background-color:rgba(252, 218, 217, 0.31)
+}
+.is-hover[empty="false"]{
+background-color:rgba(163, 198, 192, 0.66)
+}
+.is-el-hover[empty="true"]{
+background-color:rgba(252, 212, 212, 0.31)
+}
+.is-el-hover[empty="false"]{
+background-color:rgba(99, 143, 135, 0.66)
+}
+.card-empresa{
+width: 60px;
+border: 1px solid rgb(252, 252, 252);
+height: 100px;
+float: left;
+margin: 5px;
+cursor: pointer;
+
+}
+.card-empresa:hover{
+border:1px solid rgb(74, 8, 16);
+}
+.empresa-title{
+color: #FFF;
+text-shadow:0px 0px 3px #000;
+font-size:12px;
+}
+.empresa-price{
+color: #ffffff;
+text-shadow:0px 0px 3px #000;
+font-size:18px;
+text-align:center;
+font-weight:bold;
+}
+.cartel-pieces{
+-webkit-user-select: none;  /* Chrome all / Safari all */
+-moz-user-select: none;     /* Firefox all */
+-ms-user-select: none;      /* IE 10+ */
+user-select: none; 
+}

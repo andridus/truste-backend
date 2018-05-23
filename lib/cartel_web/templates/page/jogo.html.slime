@@ -1,0 +1,77 @@
+
+div#main-cartel
+script
+  |jogo_id = "
+  = @jogo
+  |"
+javascript:
+  window.onbeforeunload = function(e) {
+    var dialogText = 'Dialog text here';
+    e.returnValue = dialogText;
+    return dialogText;
+  };
+script src="/js/cartel/jogo/jogo_functions.js"
+script src="/js/cartel/jogo/jogo_channels.js"
+script src="/js/cartel/jogo/jogo_renders.js"
+script src="/js/cartel/inicial/inicial_channels.js"
+script src="/js/cartel/inicial/inicial_renders.js"
+script src="/js/cartel/rooms/room_channels.js"
+script src="/js/cartel/rooms/room_renders.js"
+script src="/js/cartel/socket.js"
+
+javascript:
+  var dom = document.getElementById("main-cartel");
+  var projector = maquette.createProjector();
+  var h = maquette.h;
+  var stored = store.get("jogo");
+  var players = [];
+  var jogo = null;
+  function finaliza_jogada(turn){
+    console.log("JOGADA FINALIZADA: ", moment().format("H:m:s"), {state: window.jogo, player: player, turn: turn});
+    //store.set("jogo", window.jogo);
+    var player = Jogadores.me();
+    channel.push("finaliza_jogada", {state: window.jogo, player: player, turn: turn}, 10000);
+    projector.renderNow();
+  };
+  function save_model(){
+    console.log("Save: ", moment().format("H:m:s"));
+    //store.set("jogo", window.jogo);
+    var player = Jogadores.me();
+    channel.push("state_cliente", {state: window.jogo, player: player}, 10000)
+    projector.renderNow();
+  };
+  function fim_do_jogo(){
+    console.log("FIM DO JOGO: ", moment().format("H:m:s"));
+    //store.set("jogo", window.jogo);
+    //store.set("players", window.players);
+    //channel.push("state", {state: window.jogo}, 10000)
+    //channel.push("players", {players: window.players}, 10000)
+    channel.push("fim_do_jogo", {}, 10000)
+    //projector.renderNow();
+  };
+  var sair = function(){
+    store.clearAll();
+    window.location.reload();
+  }
+  //JogoFunctions.init();
+  var render = function(){
+        var player = Jogadores.me();
+        return h("div",[
+          h("div",[
+            h("i.fa.fa-circle",{title: "sair", onclick: sair, styles:{position:"fixed", right:"0px",top:"0px",color:player ? "#AAFF00FF": "#FF0000FF", textShadow:"0px 0px 1px #000"}})
+          ]),
+          (window.jogo && window.jogo.iniciado ? (window.jogo.fim_do_jogo ? JogoRenders.fim_do_jogo() : JogoRenders.main()) : InicialRenders.main())
+
+        ])
+      }
+
+
+
+  window.onresize = function(){
+    var board = document.querySelector(".cartel-board");
+    if(board)
+      JogoFunctions.board_zoom(board);
+  }
+  projector.append(dom, render);
+
+script src="/js/cartel/post_functions.js"

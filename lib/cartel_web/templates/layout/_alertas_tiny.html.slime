@@ -1,0 +1,48 @@
+css:
+  #alertas-tiny{
+      z-index: 55000;
+    }
+  .alerta_tiny{
+    position:fixed;
+    top:10px;
+    right: 10px;
+    z-index: 155000;
+    padding:5px;
+    border:1px solid rgb(139, 149, 181);
+    width: 250px;
+    background: #fff;
+    color:#3b3e45;
+    transition: all 0.2s;
+  }
+  .tiny-is-danger{
+    border:1px solid rgb(187, 54, 54);
+    background: #fff;
+    color:#9f2f2c;
+  }
+  .tiny-is-info{
+    border:1px solid rgb(18, 90, 185);
+    background: #fff;
+    color:#0e0122;
+  }
+  .alerta_tiny-titulo{
+    font-weight: bold;
+    text-align: center;
+    width:100%;
+    border-bottom: 1px solid rgb(139, 149, 181);
+    margin-bottom: 5px;
+    padding:7px 15px;
+    font-size:12px;
+  }
+  .alerta_tiny-conteudo{
+    min-height: 20px;
+    width:100%;
+    text-align:center;
+    padding:2px;
+    font-size:12px;
+  }
+
+
+#alertas-tiny
+script src="/js/plugs/alertas_tiny.js"
+javascript:
+  AlertaTiny.init();

@@ -1,0 +1,96 @@
+doctype html
+html lang="pt_br"
+  head
+    meta charset="utf-8"
+    meta http-equiv="X-UA-Compatible" content="IE=edge"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    meta name="description" content="Letras Solidárias | Revisando textos, construíndos sonhos"
+    meta name="author" content="Helder de Sousa"
+    title Cartel
+    link rel="stylesheet" href="/css/bulma.css"
+    link rel="stylesheet" href="/css/fontawesome-all.min.css"
+    link rel="stylesheet" href="/css/uikit.min.css"
+    link rel="stylesheet" href="/css/app.css"
+    link rel="stylesheet" href="/css/pikaday.css"
+    script src="/js/maquette.min.js"
+    script src="/js/ramda.min.js"
+    script src="/js/is.min.js"
+    script src="/js/sha1.min.js"
+    script src="/js/reqwest.min.js"
+    script src="/js/velocity.min.js"
+    script src="/js/moment.js"
+    script src="/js/freezer.min.js"
+    script src="/js/pikaday.js"
+    script src="/js/trkl-min.js"
+    script src="/js/phoenix.js"
+    script src="/js/shotgun.min.js"
+    script src="/js/uikit.min.js"
+    script src="/js/uikit-icons.min.js"
+    script src="/js/chroma.js"
+    script src="/js/keycharm.js"
+    script src="/js/numeral.min.js"
+    script src="/js/store.everything.min.js"
+    script src="/js/cartel/functions.js"
+    script src="/js/phaser.min.js"
+    elixir:
+      uid_cartel = if  String.valid?(@conn.private.plug_session["_csrf_token"]) do
+        @conn.private.plug_session["_csrf_token"]
+        |> String.replace "/", "_"
+      else
+         " "
+      end
+    script src="/js/plugs/gridlist.js"
+    script src="/js/app.js"
+    script
+     | moment.locale("pt_br");
+     | window.PLAYER = {uid: "
+     = raw uid_cartel
+     |" };
+     | window.XCSRF = <%= raw Poison.encode!(Plug.CSRFProtection.get_csrf_token()) %> || null;
+     | numeral.register('locale', 'pt_br', {
+     |     delimiters: {
+     |         thousands: ' ',
+     |         decimal: ','
+     |     },
+     |     abbreviations: {
+     |         thousand: 'm',
+     |         million: 'mi',
+     |         billion: 'bi',
+     |         trillion: 'tri'
+     |     },
+     |     ordinal : function (number) {
+     |         return number === 1 ? 'real' : 'reais';
+     |     },
+     |     currency: {
+     |         symbol: 'R$'
+     |     }
+     |});
+     |window.userToken = "
+     = raw assigns[:user_token]
+     |"
+  javascript:
+    var eu = store.get("eu");
+    if(!eu){
+        if(window.PLAYER.uid=="" || window.PLAYER.uid==" " ){
+          window.location.reload()
+        }else{
+            store.set("eu", window.PLAYER.uid)
+        }    
+    }
+    
+  body
+    = render "_alertas_tiny.html", assigns
+    = render "_alertas_cartel.html", assigns
+    = render "_alertas.html", assigns
+   
+    script
+      = case get_flash(@conn,:alerta) do
+       - nil ->
+       - a ->
+          = case a.tipo do
+           - :danger ->
+             | Alerta.danger("<%= a.titulo%>","<%= raw a.corpo%>");
+           - _ ->
+             | Alerta.info("<%= a.titulo%>","<%= raw a.corpo%>");
+    = render @view_module, @view_template, assigns
+    /SOCKETS

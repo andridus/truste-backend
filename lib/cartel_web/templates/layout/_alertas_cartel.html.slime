@@ -1,0 +1,41 @@
+css:
+  .alerta-bg{
+    position:fixed;
+    width:100%;
+    height: 100%;
+    background-color:rgba(231, 231, 231, 0.50);
+    z-index:150000;
+    opacity:1;
+  }
+  .alerta{
+    position:absolute;
+    top:50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    z-index: 5000;
+    padding:5px;
+    border:1px solid rgb(139, 149, 181);
+    background: #fff;
+    color:#3b3e45
+  }
+  .alerta-titulo{
+    font-weight: bold;
+    text-align: center;
+    width:100%;
+    border-bottom: 1px solid rgb(139, 149, 181);
+    margin-bottom: 10px;
+    padding:2px 15px;
+    font-size:12px;
+  }
+  .alerta-conteudo{
+    min-height: 50px;
+    width:100%;
+    text-align:center;
+    padding:10px;
+  }
+
+
+#alertas-cartel
+script src="/js/plugs/alertas_cartel.js"
+javascript:
+  AlertaCartel.init();

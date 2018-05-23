@@ -1,0 +1,54 @@
+
+div#main-cartel
+
+script src="/js/cartel/jogo/jogo_functions.js"
+script src="/js/cartel/jogo/jogo_channels.js"
+script src="/js/cartel/jogo/jogo_renders.js"
+script src="/js/cartel/inicial/inicial_channels.js"
+script src="/js/cartel/inicial/inicial_renders.js"
+script src="/js/cartel/rooms/room_channels.js"
+script src="/js/cartel/rooms/room_renders.js"
+script src="/js/cartel/rooms.js"
+javascript:
+  var dom = document.getElementById("main-cartel");
+  var projector = maquette.createProjector();
+  var h = maquette.h;
+  var salas = store.get("salas")||[];
+
+
+  var _sala = store.get("sala");
+  if(_sala){
+    window.location.href="/jogo/"+window.PLAYER.uid+"/"+_sala.uid
+  }
+
+  function save_salas(){
+    console.log("Save Sala: ", moment().format("H:m:s"));
+    //store.set("salas", window.salas);
+    base.push("salas", {salas: window.salas}, 10000)
+    window.projector.renderNow();
+  };
+
+  var player = function(uid){
+    return {uid: uid, last_online: moment().unix(),sala: null}
+  };
+
+
+  var sair = function(){
+    store.clearAll();
+    window.location.reload();
+  }
+  //JogoFunctions.init();
+  var render = function(){
+        var player = Jogadores.me();
+        return h("div",[
+          h("div",[
+            h("i.fa.fa-circle",{title: "sair", onclick: sair, styles:{position:"fixed", right:"0px",top:"0px",color:player ? "#AAFF00FF": "#FF0000FF", textShadow:"0px 0px 1px #000"}})
+          ]),
+          RoomRenders.main()
+
+        ])
+      }
+
+
+  projector.append(dom, render);
+ 

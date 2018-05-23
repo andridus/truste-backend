@@ -1,0 +1,143 @@
+
+div#main-cartel
+script
+  |var jogo_id = "
+  = @jogo
+  |";
+  |criador = "
+  = @uid
+  |"
+/javascript:
+/  window.onbeforeunload = function(e) {
+/    var dialogText = 'Dialog text here';
+/    e.returnValue = dialogText;
+/    return dialogText;
+/  };
+script src="/js/cartel/jogo/jogo_functions.js"
+script src="/js/cartel/jogo/jogo_channels.js"
+script src="/js/cartel/jogo/jogo_renders.js"
+script src="/js/cartel/inicial/inicial_channels.js"
+script src="/js/cartel/inicial/inicial_renders.js"
+script src="/js/cartel/rooms/room_channels.js"
+script src="/js/cartel/rooms/room_renders.js"
+script src="/js/cartel/socket.js"
+
+
+javascript:
+  var dom = document.getElementById("main-cartel");
+  var projector = maquette.createProjector();
+  var h = maquette.h;
+  var stored = store.get("jogo");
+  var _sala = store.get("sala");
+  var sala = _sala || {uid: jogo_id, max: 6, player_id: window.PLAYER.uid, room: 0, title: "titulo", players: window.players, emblema: "emblema"};
+
+
+
+  
+  var _jogadores = store.get("_jogadores") || [];
+  if(stored){
+    if(stored.uid != jogo_id){
+      stored = null
+    }
+  }
+  var jogo = stored || {
+    uid: jogo_id,
+    criador: criador,
+    historico: [],
+    iniciado: false,
+    cores: ["rgb(249, 241, 63)", "rgb(194, 15, 15)", "rgb(107, 218, 96)", "rgb(52, 52, 48)", "rgb(130, 84, 23)", "rgb(26, 92, 203)", "rgb(254, 143, 53)"],
+    linhas: ['A','B','C','D','E','F','G','H','J'],
+    colunas: 12,
+    board: [],
+    pecas_disponiveis: [],
+    jogadores: [],
+    empresas: [
+      {name: "Hotal",     uid: uid(7), peso: 1,   icon:"/images/empresa1.png", limite: 0},
+      {name: "DeBurgue",  uid: uid(7), peso: 1,   icon:"/images/empresa2.png", limite: 0},
+      {name: "EcoTur",       uid: uid(7), peso: 2, icon:"/images/empresa3.png", limite: 0},
+      {name: "Citluz",  uid: uid(7), peso: 2, icon:"/images/empresa4.png", limite: 0},
+      {name: "Mercado",   uid: uid(7), peso: 2, icon:"/images/empresa5.png", limite: 0},
+      {name: "Telenet",      uid: uid(7), peso: 3,   icon:"/images/empresa6.png", limite: 0},
+      {name: "DaFonte",    uid: uid(7), peso: 3,   icon:"/images/empresa7.png", limite: 0}
+    ],
+    timestamp: moment().unix(),
+
+
+  };
+  var base = room.channel("base", {uid: window.PLAYER.uid})
+      base.on("presence_state",function(state){
+        if(window.jogo.iniciado){
+          sala.iniciado = true;
+        }
+        base.push("sala", {sala: sala}, 10000)
+       });
+       base.on("presence_diff",function(diff){
+        base.push("sala", {sala: sala}, 10000)
+       });
+     base.join()
+     .receive("ok", function(resp){
+      if(window.jogo.iniciado){
+          sala.iniciado = true;
+        }
+      base.push("sala", {sala: sala}, 10000)  
+     })
+     .receive("error", ({reason}) => Alerta.info("Erro de Conexão", "Você não está mais conectado!") )
+  function finaliza_jogada(turn){
+    console.log("JOGADA FINALIZADA: ", moment().format("H:m:s"));
+    var player = Jogadores.get(turn.player);
+    player.pieces.splice(player.pieces.indexOf(turn.peca), 1);
+    player.pieces.push(turn.nova_peca)
+    save_model();
+  };
+  function fim_do_jogo(){
+    console.log("FIM DO JOGO: ", moment().format("H:m:s"));
+    //store.set("jogo", window.jogo);
+    //store.set("players", window.players);
+    //channel.push("state", {state: window.jogo}, 10000)
+    //channel.push("players", {players: window.players}, 10000)
+    channel.push("fim_do_jogo", {}, 10000)
+    //projector.renderNow();
+  };
+  function save_model(){
+    console.log("Save: ", moment().format("H:m:s"));
+    store.set("jogo", window.jogo);
+    store.set("_jogadores", Jogadores.getAll(jogo.uid));
+    channel.push("state", {state: window.jogo}, 10000);
+    channel.push("players", {players: Jogadores.getAll(jogo.uid)}, 10000)
+    projector.renderNow();
+  };
+
+  var sair = function(){
+    Alerta.confirm("Sair", "Você tem certeza de que deseja perder todas as informações do Jogo atual?", function(){
+      store.clearAll();
+      Jogadores.getAll(jogo.uid).forEach(function(p){
+        channel.push("player_pull_out", {uid: p.uid}, 10000);
+      })
+      base.push("sala_out", {sala: sala}, 10000);
+      window.location.href = "/";  
+    })
+    
+  }
+  //JogoFunctions.init();
+  var render = function(){
+        var player = Jogadores.me();
+        
+        return h("div",[
+          h("div",[
+            h("i.fa.fa-sign-out-alt.fa-2x",{title: "Sair do Jogo", onclick: sair, styles:{position:"fixed", right:"0px",bottom:"80px",color:player ? (jogo.iniciado ? "#000" :"#AAFF00FF"): "#FF0000FF", textShadow:"0px 0px 1px #000"}})
+          ]),
+          (window.jogo.iniciado1 ? (window.jogo.fim_do_jogo ? JogoRenders.fim_do_jogo() : JogoRenders.main()) : InicialRenders.main())
+
+        ])
+      }
+
+
+
+  window.onresize = function(){
+    var board = document.querySelector(".cartel-board");
+    if(board)
+      JogoFunctions.board_zoom(board);
+  }
+  projector.append(dom, render);
+  
+script src="/js/cartel/post_functions.js"
